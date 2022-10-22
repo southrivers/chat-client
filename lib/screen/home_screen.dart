@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import '../utils/send_bar.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -10,6 +9,16 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // 惰性初始化
+    _controller = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,19 +29,38 @@ class _ChatScreenState extends State<ChatScreen> {
         child: Column(
           children: [
             Expanded(
-              child: Text("hello"),
+              // 必须要指定flex参数，否则页面报错
+              flex: 1,
+              // TODO 构建聊天窗
+              child: ListView.builder(
+                  itemCount: 10,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListView(shrinkWrap: true,
+
+                        // builder来根据消息构建页面
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              "hello",
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Text(
+                              "world",
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                        ]);
+                  }),
             ),
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [
-                    TextField(),
-                    Text("button"),
-                  ],
-                ),
-              ),
-            )
+            SendBar(controller: _controller)
           ],
         ),
       ),
