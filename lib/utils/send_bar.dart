@@ -1,14 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SendBar extends StatelessWidget {
   const SendBar({
     Key? key,
     required TextEditingController controller,
+    required this.socket,
   })  : _controller = controller,
         super(key: key);
 
   final TextEditingController _controller;
+  final IO.Socket socket;
 
   @override
   Widget build(BuildContext context) {
@@ -24,16 +26,22 @@ class SendBar extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.send_rounded,
               ),
               onPressed: () {
-                print(_controller.text);
+                _sendMessgae(_controller.text);
               },
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _sendMessgae(String text) {
+    // 发送消息并重置输入框
+    socket.emit('message', text);
+    _controller.text = "";
   }
 }

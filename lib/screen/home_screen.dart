@@ -20,6 +20,7 @@ class _ChatScreenState extends State<ChatScreen> {
     _controller = TextEditingController();
     // 打开聊天页面的时候完成初始化的，创建client并连接到服务端
     initSocket();
+    receiveMessage();
     super.initState();
   }
 
@@ -33,9 +34,6 @@ class _ChatScreenState extends State<ChatScreen> {
             // .enableAutoConnect()
             .build());
     socket.connect();
-    socket.onConnect((data) {
-      print(data);
-    });
   }
 
   @override
@@ -79,10 +77,17 @@ class _ChatScreenState extends State<ChatScreen> {
                         ]);
                   }),
             ),
-            SendBar(controller: _controller)
+            SendBar(
+              controller: _controller,
+              socket: socket,
+            )
           ],
         ),
       ),
     );
+  }
+
+  void receiveMessage() {
+    socket.on('message', (data) => {print(data)});
   }
 }
