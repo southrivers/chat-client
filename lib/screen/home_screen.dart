@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:html';
 
 import 'package:chat/controller/chat_message_controller.dart';
+import 'package:chat/model/message_data.dart';
 import 'package:chat/widget/chat_message_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -84,8 +86,9 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void receiveMessage() {
-    socket.on('message', (data) {
-      print(data);
+    socket.on('message-receive', (data) {
+      // print(MessageData.fromJson(data));
+      chatmessageController.chatMessage.add(MessageData.fromJson(data));
     });
   }
 }

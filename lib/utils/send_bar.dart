@@ -47,7 +47,7 @@ class SendBar extends StatelessWidget {
     // 发送消息并重置输入框
     var messageData =
         MessageData(content: text, socketId: socket.id.toString());
-    // 改变chatmessage状态
+    // 改变chatmessage状态，由于对接的是不同的客户端，因此所有消息都需要加入
     chatMessageConrtoller.chatMessage.add(messageData);
     socket.emit('message', messageData.toJson());
     _controller.text = "";
