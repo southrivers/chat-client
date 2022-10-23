@@ -1,16 +1,20 @@
+import 'package:chat/controller/chat_message_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:chat/model/message_data.dart';
 
 class SendBar extends StatelessWidget {
   const SendBar({
     Key? key,
     required TextEditingController controller,
     required this.socket,
+    required this.chatMessageConrtoller,
   })  : _controller = controller,
         super(key: key);
 
   final TextEditingController _controller;
   final IO.Socket socket;
+  final ChatMessageConrtoller chatMessageConrtoller;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +45,11 @@ class SendBar extends StatelessWidget {
 
   void _sendMessgae(String text) {
     // 发送消息并重置输入框
-    socket.emit('message', text);
+    var messageData =
+        MessageData(content: text, socketId: socket.id.toString());
+    // 改变chatmessage状态
+    chatMessageConrtoller.chatMessage.add(messageData);
+    socket.emit('message', messageData.toJson());
     _controller.text = "";
   }
 }

@@ -1,4 +1,9 @@
+import 'dart:html';
+
+import 'package:chat/controller/chat_message_controller.dart';
+import 'package:chat/widget/chat_message_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import '../utils/send_bar.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -12,6 +17,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   late TextEditingController _controller;
   late IO.Socket socket;
+  var chatmessageController = ChatMessageConrtoller();
 
   @override
   void initState() {
@@ -49,37 +55,27 @@ class _ChatScreenState extends State<ChatScreen> {
               // 必须要指定flex参数，否则页面报错
               flex: 1,
               // TODO 构建聊天窗
-              child: ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListView(shrinkWrap: true,
-
-                        // builder来根据消息构建页面
-                        children: [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              "hello",
-                              style: TextStyle(
-                                color: Colors.red,
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: Text(
-                              "world",
-                              style: TextStyle(
-                                color: Colors.red,
-                              ),
-                            ),
-                          ),
-                        ]);
-                  }),
+              child: Obx(
+                () => ListView.builder(
+                    itemCount: chatmessageController.chatMessage.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var message = chatmessageController.chatMessage[index];
+                      return Align(
+                        alignment: message.socketId == socket.id
+                            ? Alignment.topRight
+                            : Alignment.topLeft,
+                        child: ChatMessageBox(
+                          content: message.content,
+                          socketId: message.socketId,
+                        ),
+                      );
+                    }),
+              ),
             ),
             SendBar(
               controller: _controller,
               socket: socket,
+              chatMessageConrtoller: chatmessageController,
             )
           ],
         ),
@@ -88,6 +84,8 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void receiveMessage() {
-    socket.on('message', (data) => {print(data)});
+    socket.on('message', (data) {
+      print(data);
+    });
   }
 }
