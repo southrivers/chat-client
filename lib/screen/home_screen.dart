@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/send_bar.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -10,13 +11,31 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   late TextEditingController _controller;
+  late IO.Socket socket;
 
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
     // 惰性初始化
     _controller = TextEditingController();
+    // 打开聊天页面的时候完成初始化的，创建client并连接到服务端
+    initSocket();
+    super.initState();
+  }
+
+  void initSocket() {
+    print("sockect start init");
+    socket = IO.io(
+        'http://localhost:8080',
+        IO.OptionBuilder()
+            .setTransports(['websocket']) // for Flutter or Dart VM
+            .disableAutoConnect() // disable auto-connection
+            // .enableAutoConnect()
+            .build());
+    socket.connect();
+    socket.onConnect((data) {
+      print(data);
+    });
   }
 
   @override
