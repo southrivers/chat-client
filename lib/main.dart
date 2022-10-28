@@ -1,11 +1,7 @@
-import 'package:chat/screen/home_screen.dart';
+import 'package:chat/page/login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 void main() {
-  // FIXME 需要跨层传送该属性
-  IO.Socket socket = IO.io("http://localhost:8080");
-
   runApp(const MyApp());
 }
 
@@ -20,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const ChatScreen(),
+      home: const LoginPage(),
     );
   }
 }
