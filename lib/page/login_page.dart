@@ -23,7 +23,7 @@ class LoginPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Padding(
-                padding: EdgeInsets.symmetric(vertical: 160),
+                padding: EdgeInsets.symmetric(vertical: 80),
                 child: Text(
                   "话聊",
                   style: TextStyle(

@@ -1,5 +1,6 @@
 import 'package:chat/page/chat_page.dart';
 import 'package:chat/page/contract_page.dart';
+import 'package:chat/page/login_page.dart';
 import 'package:chat/page/profile_page.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ class HomePage extends StatelessWidget {
           title: Text("聊天窗"),
         ),
         // 根据页面选择进行切换
-        body: ProfilePage(),
+        body: LoginPage(),
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
